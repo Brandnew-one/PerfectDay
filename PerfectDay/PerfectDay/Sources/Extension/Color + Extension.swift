@@ -21,9 +21,9 @@ extension Bundle {
 }
 
 extension Color {
-  public static let mainBackground = Color("MainBackground", bundle: .perfectdayUI)
-  public static let subBackground = Color("SubBackground", bundle: .perfectdayUI)
-  public static let mainText = Color("MainText", bundle: .perfectdayUI)
-  public static let subText = Color("SubText", bundle: .perfectdayUI)
-  public static let primary = Color("Primary", bundle: .perfectdayUI)
+  public static let pdMainBackground = Color("MainBackground", bundle: .perfectdayUI)
+  public static let pdSubBackground = Color("SubBackground", bundle: .perfectdayUI)
+  public static let pdMainText = Color("MainText", bundle: .perfectdayUI)
+  public static let pdSubText = Color("SubText", bundle: .perfectdayUI)
+  public static let pdPrimary = Color("Primary", bundle: .perfectdayUI)
 }

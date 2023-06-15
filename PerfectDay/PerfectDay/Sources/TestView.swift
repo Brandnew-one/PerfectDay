@@ -12,17 +12,17 @@ struct TestView: View {
   var body: some View {
     ZStack {
       Rectangle()
-        .foregroundColor(PerfectDayAsset.Assets.mainBackground.swiftUIColor)
+        .foregroundColor(.pdMainBackground)
 
       VStack(alignment: .leading) {
         Text("Tuist")
-          .foregroundColor(.mainText)
+          .foregroundColor(.pdMainText)
 
         Text("이건 너무 긴데요 선생님")
-          .foregroundColor(PerfectDayAsset.Assets.subText.swiftUIColor)
+          .foregroundColor(.pdSubText)
       }
       .padding()
-      .background(PerfectDayAsset.Assets.primary.swiftUIColor)
+      .background(Color.pdPrimary)
       .cornerRadius(20)
     }
   }

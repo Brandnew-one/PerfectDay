@@ -24,8 +24,8 @@ extension Project {
       name: name,
       organizationName: organizationName,
       options: .options(
-        disableBundleAccessors: false,
-        disableSynthesizedResourceAccessors: false
+        disableBundleAccessors: true,
+        disableSynthesizedResourceAccessors: true
       ),
       targets: targets
     )
