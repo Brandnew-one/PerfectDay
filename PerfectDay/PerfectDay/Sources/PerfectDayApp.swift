@@ -4,7 +4,7 @@ import SwiftUI
 struct PerfectDayApp: App {
   var body: some Scene {
     WindowGroup {
-      Text("Tuist Setting")
+      TestView()
     }
   }
 }
