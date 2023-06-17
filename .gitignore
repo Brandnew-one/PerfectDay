@@ -62,6 +62,9 @@ DerivedData/
 *.xcodeproj
 *.xcworkspace
 
+### Google Auth ###
+Scripts/credentials.json
+
 ### Tuist derived files ###
 graph.dot
 Derived/
