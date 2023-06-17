@@ -55,6 +55,7 @@ extension Project {
       infoPlist: .extendingDefault(with: infoPlist),
       sources: ["\(projectName)/\(name)/Sources/**"],
       resources: ["\(projectName)/\(name)/Resources/**"],
+      scripts: [.localizedString],
       dependencies: dependencies
     )
 

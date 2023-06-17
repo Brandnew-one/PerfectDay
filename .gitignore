@@ -62,6 +62,12 @@ DerivedData/
 *.xcodeproj
 *.xcworkspace
 
+### Google Auth ###
+Scripts/credentials.json
+
+### Localized File ###
+PerfectDay/PerfectDay/Resources/Localized
+
 ### Tuist derived files ###
 graph.dot
 Derived/

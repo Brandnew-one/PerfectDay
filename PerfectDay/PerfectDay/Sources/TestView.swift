@@ -15,7 +15,7 @@ struct TestView: View {
         .foregroundColor(.pdMainBackground)
 
       VStack(alignment: .leading) {
-        Text("Tuist")
+        Text(LS.backlog.localized)
           .foregroundColor(.pdMainText)
 
         Text("이건 너무 긴데요 선생님")
