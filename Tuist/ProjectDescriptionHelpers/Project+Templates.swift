@@ -43,7 +43,10 @@ extension Project {
       "CFBundleShortVersionString": "1.0",
       "CFBundleVersion": "1",
       "UIMainStoryboardFile": "",
-      "UILaunchStoryboardName": "LaunchScreen"
+      "UILaunchStoryboardName": "LaunchScreen",
+      "Fonts provided by application": [
+        "LINESeedKR-Rg.otf", "LINESeedKR-Th.otf"
+      ]
     ]
 
     let mainTarget = Target(
