@@ -8,22 +8,73 @@
 
 import SwiftUI
 
+// FIXME: - 임시 파일
+enum TabItem {
+  case backlog
+  case board
+  case setting
+
+  var title: String {
+    switch self {
+    case .backlog:
+      return "백로그"
+    case .board:
+      return "보드"
+    case .setting:
+      return "설정"
+    }
+  }
+
+  var image: Image {
+    switch self {
+    case .backlog:
+      return Image(systemName: "backpack")
+    case .board:
+      return Image(systemName: "list.clipboard")
+    case .setting:
+      return Image(systemName: "gear")
+    }
+  }
+}
+
 struct TestView: View {
+  @State
+  private var selectedTab: TabItem = .backlog
+
   var body: some View {
-    ZStack {
-      Rectangle()
-        .foregroundColor(.pdMainBackground)
-
-      VStack(alignment: .leading) {
-        Text(LS.backlog.localized)
-          .foregroundColor(.pdMainText)
-
-        Text("이건 너무 긴데요 선생님")
-          .foregroundColor(.pdSubText)
+    TabView(selection: $selectedTab) {
+      NavigationView {
+        BacklogListView(viewModel: BacklogListViewModel())
       }
-      .padding()
-      .background(Color.pdPrimary)
-      .cornerRadius(20)
+      .tag(TabItem.backlog)
+      .tabItem {
+        TabItem.backlog.image
+
+        Text(TabItem.backlog.title)
+      }
+
+      Text("칸반 보드 뷰")
+        .tag(TabItem.board)
+        .tabItem {
+          TabItem.board.image
+
+          Text(TabItem.board.title)
+        }
+
+      Text("사용자 설정 뷰")
+        .tag(TabItem.setting)
+        .tabItem {
+          TabItem.setting.image
+
+          Text(TabItem.setting.title)
+        }
+    }
+    .accentColor(.pdPrimary)
+    .onAppear {
+      if #available(iOS 15.0, *) {
+        let appearance = UITabBarAppearance()
+        UITabBar.appearance().scrollEdgeAppearance = appearance
+      }
     }
   }
 }
