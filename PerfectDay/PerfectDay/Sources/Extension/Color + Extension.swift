@@ -26,4 +26,16 @@ extension Color {
   public static let pdMainText = Color("MainText", bundle: .perfectdayUI)
   public static let pdSubText = Color("SubText", bundle: .perfectdayUI)
   public static let pdPrimary = Color("Primary", bundle: .perfectdayUI)
+
+  // MARK: - init from Tag
+  init(_ tag: Tag) {
+    self.init(
+      cgColor: CGColor(
+        red: tag.red,
+        green: tag.green,
+        blue: tag.blue,
+        alpha: tag.alpha
+      )
+    )
+  }
 }
