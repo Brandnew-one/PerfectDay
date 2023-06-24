@@ -8,10 +8,13 @@
 
 import Foundation
 
-struct Issue {
+struct Issue: Identifiable {
+  let id: UUID = UUID()
   var title: String
   var content: String
+  var expireActive: Bool
   var expireDate: Date?
+  var locationActive: Bool
   var latitude: Double?
   var longitude: Double?
   var tags: [Tag]
@@ -19,14 +22,18 @@ struct Issue {
   init(
     title: String,
     content: String,
+    expireActive: Bool,
     expireDate: Date? = nil,
+    locationActive: Bool,
     latitude: Double? = nil,
     longitude: Double? = nil,
     tags: [Tag]
   ) {
     self.title = title
     self.content = content
+    self.expireActive = expireActive
     self.expireDate = expireDate
+    self.locationActive = locationActive
     self.latitude = latitude
     self.longitude = longitude
     self.tags = tags
