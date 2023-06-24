@@ -20,8 +20,8 @@ struct TagView: View {
     Text(tag.title)
       .font(.pdCaption1)
       .foregroundColor(.pdSubText)
-      .padding(.horizontal, 6)
-      .padding(.vertical, 4)
+      .padding(.horizontal, 8)
+      .padding(.vertical, 6)
       .background(Color(tag))
       .cornerRadius(18)
   }

@@ -8,12 +8,15 @@
 
 import Combine
 import Foundation
+import MapKit
 
+// FIXME: - CoreLocation 동의시에만 Map 기능 사용할 수 있도록 제한하기
 final class IssueViewModel: ObservableObject {
   struct Input {
     var issueTitle = BindingSubject<String>(value: "")
     var issueContent = BindingSubject<String>(value: "")
     var expireToggle = BindingSubject<Bool>(value: false)
+    var expireDate = BindingSubject<Date>(value: Date())
     var locationToggle = BindingSubject<Bool>(value: false)
     fileprivate let tagButtonSbj = PassthroughSubject<Void, Never>()
     fileprivate let confirmSbj = PassthroughSubject<Void, Never>()
@@ -42,6 +45,7 @@ final class IssueViewModel: ObservableObject {
     var tagSheetisShow: Bool = false
     var expireisShow: Bool = false
     var locationisShow: Bool = false
+    var location: MKCoordinateRegion = MKCoordinateRegion()
     var tags: [Tag] = []
     var viewMode: ViewMode = .modal
   }
@@ -64,6 +68,26 @@ final class IssueViewModel: ObservableObject {
       input.expireToggle.value = issue.expireActive
       input.locationToggle.value = issue.locationActive
       output.tags = issue.tags
+      output.expireisShow = issue.expireActive
+      output.locationisShow = issue.locationActive
+    }
+
+    if let expireDate = issue?.expireDate {
+      input.expireDate.value = expireDate
+    }
+
+    if let latitude = issue?.latitude,
+       let longtitue = issue?.longitude {
+      output.location = MKCoordinateRegion(
+        center: CLLocationCoordinate2D(
+          latitude: latitude,
+          longitude: longtitue
+        ),
+        span: MKCoordinateSpan(
+          latitudeDelta: 0.1,
+          longitudeDelta: 0.1
+        )
+      )
     }
 
     transform()
@@ -75,6 +99,22 @@ final class IssueViewModel: ObservableObject {
       .sink(receiveValue: { [weak self] _ in
         guard let self else { return }
         self.output.tagSheetisShow = true
+      })
+      .store(in: &cancellables)
+
+    input.expireToggle.subject
+      .throttle(for: 0.1, scheduler: RunLoop.main, latest: false)
+      .sink(receiveValue: { [weak self] in
+        guard let self else { return }
+        self.output.expireisShow = $0
+      })
+      .store(in: &cancellables)
+
+    input.locationToggle.subject
+      .throttle(for: 0.1, scheduler: RunLoop.main, latest: false)
+      .sink(receiveValue: { [weak self] in
+        guard let self else { return }
+        self.output.locationisShow = $0
       })
       .store(in: &cancellables)
   }

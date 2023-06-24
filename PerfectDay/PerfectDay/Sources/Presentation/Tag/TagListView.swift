@@ -16,6 +16,9 @@ struct TagListView: View {
   @State
   private var searchText: String = ""
 
+  @Environment(\.dismiss)
+  private var dismiss
+
   var body: some View {
     NavigationView {
       ScrollView {
@@ -31,6 +34,7 @@ struct TagListView: View {
       .toolbar {
         ToolbarItem(placement: .navigationBarLeading) {
           Text("취소")
+            .wrapToButton { dismiss() }
         }
 
         ToolbarItem(placement: .navigationBarTrailing) {

@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import MapKit
 
 // MARK: - (2, 2-1)
 /// 이슈 생성(EmptyValue), 이슈 수정(Issue)
@@ -55,6 +56,7 @@ extension IssueView {
       TextField("Issue Title", text: $viewModel.input.issueTitle.value)
         .font(.pdBody1)
         .foregroundColor(.pdMainText)
+        .textFieldStyle(.plain)
         .padding()
 
       Divider()
@@ -66,25 +68,27 @@ extension IssueView {
         .foregroundColor(.pdSubText)
         .multilineTextAlignment(.leading)
         .frame(height: 180) // dynamic height issue in scrollview
+        .scrollContentBackground(.hidden)
     }
-    .cornerRadius(18)
-    .overlay(
-      RoundedRectangle(cornerRadius: 18)
-        .stroke(Color.pdPrimary)
-    )
     .padding()
+    .background(Color.pdMainBackground)
+    .cornerRadius(18)
   }
 
   var tagSection: some View {
-    VStack(spacing: 8) {
+    VStack(spacing: 12) {
       HStack {
         Text("태그")
           .font(.pdTitle3)
-          .foregroundColor(.pdSubText)
+          .foregroundColor(.pdMainText)
 
         Spacer()
 
         Image(systemName: "plus.circle")
+          .resizable()
+          .renderingMode(.template)
+          .frame(width: 28, height: 28)
+          .foregroundColor(.pdPrimary)
           .wrapToButton { viewModel.action(.tagTapped) }
       }
 
@@ -97,41 +101,60 @@ extension IssueView {
       }
     }
     .padding()
+    .background(Color.pdMainBackground)
+    .cornerRadius(18)
   }
 
   var expireDateSection: some View {
-    VStack(spacing: 0) {
+    VStack(alignment: .leading, spacing: 12) {
       HStack {
         Text("마감일")
           .font(.pdTitle3)
-          .foregroundColor(.pdSubText)
+          .foregroundColor(.pdMainText)
 
         Spacer()
 
-        Image(systemName: "plus.circle")
+        Toggle("", isOn: $viewModel.input.expireToggle.value)
+          .tint(Color.pdPrimary)
+      }
+
+      if viewModel.output.expireisShow {
+        DatePicker("", selection: $viewModel.input.expireDate.value)
+          .labelsHidden()
+          .datePickerStyle(.compact)
       }
     }
     .padding()
+    .background(Color.pdMainBackground)
+    .cornerRadius(18)
   }
 
   var locationSection: some View {
-    VStack(spacing: 0) {
+    VStack(spacing: 12) {
       HStack {
         Text("위치")
           .font(.pdTitle3)
-          .foregroundColor(.pdSubText)
+          .foregroundColor(.pdMainText)
 
         Spacer()
 
-        Image(systemName: "plus.circle")
+        Toggle("", isOn: $viewModel.input.locationToggle.value)
+          .tint(Color.pdPrimary)
+      }
+
+      if viewModel.output.locationisShow {
+        Map(coordinateRegion: $viewModel.output.location)
+          .frame(height: 80)
       }
     }
     .padding()
+    .background(Color.pdMainBackground)
+    .cornerRadius(18)
   }
 
   var content: some View {
     ScrollView {
-      VStack {
+      VStack(spacing: 16) {
         issueSection
 
         tagSection
@@ -139,7 +162,11 @@ extension IssueView {
         expireDateSection
 
         locationSection
+
+        Divider().opacity(0)
+          .frame(height: 10)
       }
+      .padding(.horizontal, 8)
     }
     .background(Color.pdSubBackground)
     .sheet(
