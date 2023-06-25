@@ -10,6 +10,7 @@ import Foundation
 
 struct Issue: Identifiable {
   let id: UUID = UUID()
+  var state: IssueState
   var title: String
   var content: String
   var expireActive: Bool
@@ -20,6 +21,7 @@ struct Issue: Identifiable {
   var tags: [Tag]
 
   init(
+    state: IssueState = .backlog,
     title: String,
     content: String,
     expireActive: Bool,
@@ -29,6 +31,7 @@ struct Issue: Identifiable {
     longitude: Double? = nil,
     tags: [Tag]
   ) {
+    self.state = state
     self.title = title
     self.content = content
     self.expireActive = expireActive

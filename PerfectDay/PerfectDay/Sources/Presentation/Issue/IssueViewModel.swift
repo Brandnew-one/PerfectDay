@@ -20,11 +20,13 @@ final class IssueViewModel: ObservableObject {
     var locationToggle = BindingSubject<Bool>(value: false)
     fileprivate let tagButtonSbj = PassthroughSubject<Void, Never>()
     fileprivate let confirmSbj = PassthroughSubject<Void, Never>()
+    fileprivate let stateButtonSbj = PassthroughSubject<Void, Never>()
   }
 
   enum Action {
     case tagTapped
     case confirmTapped
+    case stateTapped
   }
 
   enum ViewMode {
@@ -38,15 +40,19 @@ final class IssueViewModel: ObservableObject {
       input.tagButtonSbj.send()
     case .confirmTapped:
       input.confirmSbj.send()
+    case .stateTapped:
+      input.stateButtonSbj.send()
     }
   }
 
   struct Output {
     var tagSheetisShow: Bool = false
+    var stateSheetisShow: Bool = false
     var expireisShow: Bool = false
     var locationisShow: Bool = false
     var location: MKCoordinateRegion = MKCoordinateRegion()
     var tags: [Tag] = []
+    var issueState: IssueState = .backlog
     var viewMode: ViewMode = .modal
   }
 
@@ -70,6 +76,7 @@ final class IssueViewModel: ObservableObject {
       output.tags = issue.tags
       output.expireisShow = issue.expireActive
       output.locationisShow = issue.locationActive
+      output.issueState = issue.state
     }
 
     if let expireDate = issue?.expireDate {
@@ -99,6 +106,14 @@ final class IssueViewModel: ObservableObject {
       .sink(receiveValue: { [weak self] _ in
         guard let self else { return }
         self.output.tagSheetisShow = true
+      })
+      .store(in: &cancellables)
+
+    input.stateButtonSbj
+      .throttle(for: 0.1, scheduler: RunLoop.main, latest: false)
+      .sink(receiveValue: { [weak self] _ in
+        guard let self else { return }
+        self.output.stateSheetisShow = true
       })
       .store(in: &cancellables)
 
