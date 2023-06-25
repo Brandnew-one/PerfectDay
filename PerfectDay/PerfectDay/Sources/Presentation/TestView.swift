@@ -53,13 +53,15 @@ struct TestView: View {
         Text(TabItem.backlog.title)
       }
 
-      Text("칸반 보드 뷰")
-        .tag(TabItem.board)
-        .tabItem {
-          TabItem.board.image
+      NavigationView {
+        BoardTabView(viewModel: BoardTabViewModel())
+      }
+      .tag(TabItem.board)
+      .tabItem {
+        TabItem.board.image
 
-          Text(TabItem.board.title)
-        }
+        Text(TabItem.board.title)
+      }
 
       Text("사용자 설정 뷰")
         .tag(TabItem.setting)
