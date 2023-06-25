@@ -75,6 +75,15 @@ extension IssueView {
     .cornerRadius(18)
   }
 
+  var stateSection: some View {
+    Text(viewModel.output.issueState.title)
+      .font(.pdTitle3)
+      .foregroundColor(.pdMainText)
+      .padding()
+      .background(Color.pdPrimary)
+      .wrapToButton { viewModel.action(.stateTapped) }
+  }
+
   var tagSection: some View {
     VStack(spacing: 12) {
       HStack {
@@ -154,8 +163,10 @@ extension IssueView {
 
   var content: some View {
     ScrollView {
-      VStack(spacing: 16) {
+      VStack(alignment: .leading, spacing: 16) {
         issueSection
+
+        stateSection
 
         tagSection
 
@@ -174,6 +185,31 @@ extension IssueView {
       onDismiss: { }
     ) {
       TagListView()
+    }
+    // FIXME: -
+    .bottomSheet(isShow: $viewModel.output.stateSheetisShow) {
+      VStack(alignment: .leading) {
+        Text("전환선택")
+          .font(.pdTitle3)
+          .foregroundColor(.pdMainText)
+          .padding()
+
+        Text("전환대상 -> SUSPEND")
+          .font(.pdBody1)
+          .foregroundColor(.pdMainText)
+          .padding()
+
+        Text("할일 -> 해야할 일")
+          .font(.pdBody1)
+          .foregroundColor(.pdMainText)
+          .padding()
+
+        Text("완료 -> 완료됨")
+          .font(.pdBody1)
+          .foregroundColor(.pdMainText)
+          .padding()
+      }
+      .background(Color.pdMainBackground)
     }
   }
 }
