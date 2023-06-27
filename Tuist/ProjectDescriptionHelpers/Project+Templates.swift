@@ -27,6 +27,12 @@ extension Project {
         disableBundleAccessors: true,
         disableSynthesizedResourceAccessors: true
       ),
+      packages: [
+        .remote(
+          url: "https://github.com/realm/realm-swift.git",
+          requirement: .upToNextMinor(from: "10.40.0")
+        )
+      ],
       targets: targets
     )
   }

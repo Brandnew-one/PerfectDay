@@ -26,7 +26,8 @@ let project = Project.app(
   platform: .iOS,
   organizationName: "sangwon",
   dependencies: [
-    .external(name: "Realm"),
+//    .external(name: "RealmSwift"),
+    .package(product: "RealmSwift"),
     .external(name: "Alamofire")
   ]
 )
