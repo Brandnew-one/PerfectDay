@@ -13,10 +13,7 @@ let spm = SwiftPackageManagerDependencies([
 ])
 
 //let carthage = CarthageDependencies([
-//  .binary(
-//    path: "github realm/realm-cocoa",
-//    requirement: .upToNext("10.40.0")
-//  )
+//  .github(path: "realm/realm-cocoa", requirement: .upToNext("10.40.0"))
 //])
 
 let dependency = Dependencies(
