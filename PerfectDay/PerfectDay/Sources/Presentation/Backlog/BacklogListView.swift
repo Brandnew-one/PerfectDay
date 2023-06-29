@@ -9,6 +9,9 @@
 import SwiftUI
 
 struct BacklogListView: View {
+  @EnvironmentObject
+  var appState: AppState
+
   @StateObject
   var viewModel: BacklogListViewModel
 
@@ -20,7 +23,7 @@ struct BacklogListView: View {
             NavigationLink(
               destination: {
                 IssueView(
-                  viewModel: IssueViewModel(
+                  viewModel: appState.di.makeIssueViewModel(
                     issue: issue,
                     viewMode: .push
                   )
@@ -53,7 +56,12 @@ struct BacklogListView: View {
         .wrapToButton { viewModel.action(.addIssueTapped) }
     }
     .sheet(isPresented: $viewModel.output.issueSheetisShow) {
-      IssueView(viewModel: IssueViewModel(viewMode: .modal))
+      IssueView(
+        viewModel: appState.di.makeIssueViewModel(
+          issue: nil,
+          viewMode: .modal
+        )
+      )
     }
   }
 }

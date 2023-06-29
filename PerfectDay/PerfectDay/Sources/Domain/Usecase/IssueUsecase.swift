@@ -10,5 +10,16 @@ import Combine
 import Foundation
 
 final class IssueUsecase {
+  private let notificationRepo: NotificationRepository
+
+  init(
+    notificationRepo: NotificationRepository
+  ) {
+    self.notificationRepo = notificationRepo
+  }
+
+  func checkNotificationAuth() -> AnyPublisher<UserState, Never> {
+    notificationRepo.checkNotificationUserAuth()
+  }
 
 }

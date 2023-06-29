@@ -49,6 +49,7 @@ final class IssueViewModel: ObservableObject {
     var tagSheetisShow: Bool = false
     var stateSheetisShow: Bool = false
     var expireisShow: Bool = false
+    var expierAlertShow: Bool = false
     var locationisShow: Bool = false
     var location: MKCoordinateRegion = MKCoordinateRegion()
     var tags: [Tag] = []
@@ -61,11 +62,14 @@ final class IssueViewModel: ObservableObject {
   private var cancellables = Set<AnyCancellable>()
 
   private var issue: Issue?
+  private let usecase: IssueUsecase
 
   init(
+    usecase: IssueUsecase,
     issue: Issue? = nil,
     viewMode: ViewMode = .modal
   ) {
+    self.usecase = usecase
     self.issue = issue
     self.output.viewMode = viewMode
     if let issue = issue {
@@ -119,9 +123,28 @@ final class IssueViewModel: ObservableObject {
 
     input.expireToggle.subject
       .throttle(for: 0.1, scheduler: RunLoop.main, latest: false)
+      .flatMap { [weak self] toggle -> AnyPublisher<UserState, Never> in
+        guard let self else {
+          return Empty(outputType: UserState.self, failureType: Never.self)
+            .eraseToAnyPublisher()
+        }
+        if !toggle {
+          self.output.expireisShow = toggle
+          return Empty(outputType: UserState.self, failureType: Never.self)
+            .eraseToAnyPublisher()
+        } else {
+          return usecase.checkNotificationAuth()
+        }
+      }
+      .receive(on: RunLoop.main)
       .sink(receiveValue: { [weak self] in
         guard let self else { return }
-        self.output.expireisShow = $0
+        if $0 == .approved {
+          self.output.expireisShow = true
+        } else {
+          self.output.expireisShow = false
+          self.output.expierAlertShow = true
+        }
       })
       .store(in: &cancellables)
 
