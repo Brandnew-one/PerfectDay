@@ -22,7 +22,7 @@ struct IssueView: View {
     if viewModel.output.viewMode == .modal {
       NavigationView {
         content
-          .navigationTitle("이슈 생성")
+          .navigationTitle(LS.Issue0000.localized)
           .navigationBarTitleDisplayMode(.inline)
           .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
@@ -38,7 +38,7 @@ struct IssueView: View {
       }
     } else {
       content
-        .navigationTitle("이슈 수정")
+        .navigationTitle(LS.Issue0010.localized)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
           ToolbarItem(placement: .navigationBarTrailing) {
@@ -53,7 +53,7 @@ struct IssueView: View {
 extension IssueView {
   var issueSection: some View {
     VStack(spacing: 0) {
-      TextField("Issue Title", text: $viewModel.input.issueTitle.value)
+      TextField(LS.Issue0020.localized, text: $viewModel.input.issueTitle.value)
         .font(.pdBody1)
         .foregroundColor(.pdMainText)
         .textFieldStyle(.plain)
@@ -87,7 +87,7 @@ extension IssueView {
   var tagSection: some View {
     VStack(spacing: 12) {
       HStack {
-        Text("태그")
+        Text(LS.Issue0030.localized)
           .font(.pdTitle3)
           .foregroundColor(.pdMainText)
 
@@ -117,7 +117,7 @@ extension IssueView {
   var expireDateSection: some View {
     VStack(alignment: .leading, spacing: 12) {
       HStack {
-        Text("마감일")
+        Text(LS.Issue0040.localized)
           .font(.pdTitle3)
           .foregroundColor(.pdMainText)
 
@@ -141,7 +141,7 @@ extension IssueView {
   var locationSection: some View {
     VStack(spacing: 12) {
       HStack {
-        Text("위치")
+        Text(LS.Issue0050.localized)
           .font(.pdTitle3)
           .foregroundColor(.pdMainText)
 
@@ -185,6 +185,20 @@ extension IssueView {
       onDismiss: { }
     ) {
       TagListView()
+    }
+    .alert(LS.Issue0060.localized, isPresented: $viewModel.output.expierAlertShow) {
+      Button(LS.Issue0070.localized, role: .cancel) {
+        viewModel.input.expireToggle.value = false
+      }
+      Button(LS.Issue0080.localized, role: .destructive) {
+        guard
+          let url = URL(string: UIApplication.openSettingsURLString)
+        else { return }
+
+        if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+        }
+      }
     }
     // FIXME: -
     .bottomSheet(isShow: $viewModel.output.stateSheetisShow) {

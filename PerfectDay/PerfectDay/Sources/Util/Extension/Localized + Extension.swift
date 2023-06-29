@@ -9,7 +9,16 @@
 import Foundation
 
 enum LS: String {
-  case backlog
+  case Issue0000
+  case Issue0010
+  case Issue0020
+  case Issue0030
+  case Issue0040
+  case Issue0050
+  case Issue0060
+  case Issue0070
+  case Issue0080
+
 
   var localized: String {
     NSLocalizedString(self.rawValue, comment: "")
