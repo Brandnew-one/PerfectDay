@@ -2,9 +2,12 @@ import SwiftUI
 
 @main
 struct PerfectDayApp: App {
+  private let appState = AppState(di: AppDI())
+
   var body: some Scene {
     WindowGroup {
       TestView()
+        .environmentObject(appState)
     }
   }
 }

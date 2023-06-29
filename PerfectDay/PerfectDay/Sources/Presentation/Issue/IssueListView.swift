@@ -11,6 +11,9 @@ import SwiftUI
 // MARK: - 칸반보드에서 보여줄 이슈 리스트 디자인
 /// 디자인 변경 고려
 struct IssueListView: View {
+  @EnvironmentObject
+  var appState: AppState
+
   var issues: [Issue]
 
   init(issues: [Issue]) {
@@ -25,7 +28,7 @@ struct IssueListView: View {
             destination: {
               NavigationLazyView(
                 IssueView(
-                  viewModel: IssueViewModel(
+                  viewModel: appState.di.makeIssueViewModel(
                     issue: issue,
                     viewMode: .push
                   )
