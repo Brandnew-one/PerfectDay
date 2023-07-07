@@ -45,15 +45,24 @@ extension Project {
     dependencies: [TargetDependency]
   ) -> [Target] {
     let platform: Platform = platform
-    let infoPlist: [String: InfoPlist.Value] = [
+
+    var infoPlist: [String: InfoPlist.Value] = [
       "CFBundleShortVersionString": "1.0",
       "CFBundleVersion": "1",
-      "UIMainStoryboardFile": "",
       "UILaunchStoryboardName": "LaunchScreen",
       "Fonts provided by application": [
         "LINESeedKR-Rg.otf", "LINESeedKR-Th.otf"
       ]
     ]
+
+    let locationAuth: [String: InfoPlist.Value] = [
+      "NSLocationAlwaysAndWhenInUseUsageDescription":
+        "위치 알림 서비스를 위해서는 위치 정보 동의가 필요해요",
+      "NSLocationWhenInUseUsageDescription":
+        "현재 위치를 알기 위해서는 위치 정보 동의가 필요해요"
+    ]
+
+    locationAuth.forEach { infoPlist[$0] = $1 }
 
     let mainTarget = Target(
       name: name,
