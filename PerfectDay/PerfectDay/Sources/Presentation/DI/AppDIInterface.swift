@@ -14,5 +14,10 @@ protocol AppDIInterface {
     issue: Issue?,
     viewMode: IssueViewModel.ViewMode
   ) -> IssueViewModel
+
+  func makeMapDetailViewModel(
+    coordinate: Coordinate?,
+    dismissSbj: PassthroughSubject<Coordinate, Never>
+  ) -> MapDetailViewModel
 }
 

@@ -18,15 +18,20 @@ final class IssueViewModel: ObservableObject {
     var expireToggle = BindingSubject<Bool>(value: false)
     var expireDate = BindingSubject<Date>(value: Date())
     var locationToggle = BindingSubject<Bool>(value: false)
+    let coorChangeSbj = PassthroughSubject<Coordinate, Never>()
+
     fileprivate let tagButtonSbj = PassthroughSubject<Void, Never>()
     fileprivate let confirmSbj = PassthroughSubject<Void, Never>()
     fileprivate let stateButtonSbj = PassthroughSubject<Void, Never>()
+    fileprivate let mapButtonSbj = PassthroughSubject<Void, Never>()
   }
 
   enum Action {
     case tagTapped
     case confirmTapped
     case stateTapped
+    case mapTapped
+    case coorChanged(Coordinate)
   }
 
   enum ViewMode {
@@ -42,6 +47,10 @@ final class IssueViewModel: ObservableObject {
       input.confirmSbj.send()
     case .stateTapped:
       input.stateButtonSbj.send()
+    case .mapTapped:
+      input.mapButtonSbj.send()
+    case .coorChanged(let coor):
+      input.coorChangeSbj.send(coor)
     }
   }
 
@@ -51,6 +60,7 @@ final class IssueViewModel: ObservableObject {
     var expireisShow: Bool = false
     var expierAlertShow: Bool = false
     var locationisShow: Bool = false
+    var mapSheetisShow: Bool = false
     var location: MKCoordinateRegion = MKCoordinateRegion()
     var tags: [Tag] = []
     var issueState: IssueState = .backlog
@@ -61,7 +71,7 @@ final class IssueViewModel: ObservableObject {
   @Published var output = Output()
   private var cancellables = Set<AnyCancellable>()
 
-  private var issue: Issue?
+  var issue: Issue?
   private let usecase: IssueUsecase
 
   init(
@@ -87,16 +97,17 @@ final class IssueViewModel: ObservableObject {
       input.expireDate.value = expireDate
     }
 
-    if let latitude = issue?.latitude,
-       let longtitue = issue?.longitude {
+    if let coordinate = issue?.coordinate {
+      let latitude = coordinate.latitude
+      let longitude = coordinate.longtitude
       output.location = MKCoordinateRegion(
         center: CLLocationCoordinate2D(
           latitude: latitude,
-          longitude: longtitue
+          longitude: longitude
         ),
         span: MKCoordinateSpan(
-          latitudeDelta: 0.1,
-          longitudeDelta: 0.1
+          latitudeDelta: 0.001,
+          longitudeDelta: 0.001
         )
       )
     }
@@ -150,9 +161,36 @@ final class IssueViewModel: ObservableObject {
 
     input.locationToggle.subject
       .throttle(for: 0.1, scheduler: RunLoop.main, latest: false)
+      .receive(on: RunLoop.main)
       .sink(receiveValue: { [weak self] in
         guard let self else { return }
         self.output.locationisShow = $0
+      })
+      .store(in: &cancellables)
+
+    input.mapButtonSbj
+      .throttle(for: 0.1, scheduler: RunLoop.main, latest: false)
+      .receive(on: RunLoop.main)
+      .sink(receiveValue: { [weak self] in
+        guard let self else { return }
+        self.output.mapSheetisShow = true
+      })
+      .store(in: &cancellables)
+
+    input.coorChangeSbj
+      .receive(on: RunLoop.main)
+      .sink(receiveValue: { [weak self] in
+        guard let self else { return }
+        self.output.location = MKCoordinateRegion(
+          center: CLLocationCoordinate2D(
+            latitude: $0.latitude,
+            longitude: $0.longtitude
+          ),
+          span: MKCoordinateSpan(
+            latitudeDelta: 0.001,
+            longitudeDelta: 0.001
+          )
+        )
       })
       .store(in: &cancellables)
   }

@@ -10,5 +10,5 @@ import Combine
 import Foundation
 
 protocol NotificationRepository {
-  func checkNotificationUserAuth() -> AnyPublisher<UserState, Never>  
+  func checkNotificationUserAuth() -> AnyPublisher<UserState, Never>
 }

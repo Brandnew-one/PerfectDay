@@ -16,8 +16,7 @@ struct Issue: Identifiable {
   var expireActive: Bool
   var expireDate: Date?
   var locationActive: Bool
-  var latitude: Double?
-  var longitude: Double?
+  var coordinate: Coordinate?
   var tags: [Tag]
 
   init(
@@ -27,8 +26,7 @@ struct Issue: Identifiable {
     expireActive: Bool,
     expireDate: Date? = nil,
     locationActive: Bool,
-    latitude: Double? = nil,
-    longitude: Double? = nil,
+    coordinate: Coordinate? = nil,
     tags: [Tag]
   ) {
     self.state = state
@@ -37,8 +35,13 @@ struct Issue: Identifiable {
     self.expireActive = expireActive
     self.expireDate = expireDate
     self.locationActive = locationActive
-    self.latitude = latitude
-    self.longitude = longitude
+    self.coordinate = coordinate
     self.tags = tags
   }
+}
+
+// FIXME: -
+struct Coordinate {
+  let latitude: Double
+  let longtitude: Double
 }

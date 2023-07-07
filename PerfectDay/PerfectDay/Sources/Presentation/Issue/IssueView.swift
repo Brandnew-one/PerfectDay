@@ -9,14 +9,32 @@
 import SwiftUI
 import MapKit
 
+fileprivate struct MapLocaion: Identifiable {
+  var id: UUID = UUID()
+  var location: CLLocationCoordinate2D
+}
+
 // MARK: - (2, 2-1)
 /// 이슈 생성(EmptyValue), 이슈 수정(Issue)
 struct IssueView: View {
+  @EnvironmentObject
+  var appState: AppState
+
   @StateObject
   var viewModel: IssueViewModel
 
   @Environment(\.dismiss)
   private var dismiss
+
+  private var mapMarker: [MapLocaion] {
+    [
+      MapLocaion(
+        location: CLLocationCoordinate2D(
+          latitude: viewModel.output.location.center.latitude,
+          longitude: viewModel.output.location.center.longitude
+        ))
+    ]
+  }
 
   var body: some View {
     if viewModel.output.viewMode == .modal {
@@ -152,8 +170,15 @@ extension IssueView {
       }
 
       if viewModel.output.locationisShow {
-        Map(coordinateRegion: $viewModel.output.location)
-          .frame(height: 80)
+        Map(
+          coordinateRegion: $viewModel.output.location,
+          interactionModes: .zoom,
+          annotationItems: mapMarker
+        ) { item in
+          MapMarker(coordinate: item.location)
+        }
+        .frame(height: 80)
+        .wrapToButton { viewModel.action(.mapTapped) }
       }
     }
     .padding()
@@ -180,6 +205,16 @@ extension IssueView {
       .padding(.horizontal, 8)
     }
     .background(Color.pdSubBackground)
+    .sheet(
+      isPresented: $viewModel.output.mapSheetisShow
+    ) {
+      MapDetailView(
+        viewModel: appState.di.makeMapDetailViewModel(
+          coordinate: viewModel.issue?.coordinate,
+          dismissSbj: viewModel.input.coorChangeSbj
+        )
+      )
+    }
     .sheet(
       isPresented: $viewModel.output.tagSheetisShow,
       onDismiss: { }
