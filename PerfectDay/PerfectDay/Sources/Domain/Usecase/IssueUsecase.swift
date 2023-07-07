@@ -11,15 +11,31 @@ import Foundation
 
 final class IssueUsecase {
   private let notificationRepo: NotificationRepository
+  private let locationRepo: LocationRepository
+
+  // MARK: - Output Stream
+  var locationPublisher: AnyPublisher<Coordinate, PDError>
 
   init(
-    notificationRepo: NotificationRepository
+    notificationRepo: NotificationRepository,
+    locationRepo: LocationRepository
   ) {
     self.notificationRepo = notificationRepo
+    self.locationRepo = locationRepo
+    self.locationPublisher = locationRepo.locationPublisher
   }
+
 
   func checkNotificationAuth() -> AnyPublisher<UserState, Never> {
     notificationRepo.checkNotificationUserAuth()
+  }
+
+  func getCetnerPosAddress(
+    _ centerCoordinate: Coordinate
+  ) ->AnyPublisher<String, PDError> {
+    locationRepo.getRoadAddress(from: centerCoordinate)
+      .mapError { $0 as? PDError ?? .default }
+      .eraseToAnyPublisher()
   }
 
 }
