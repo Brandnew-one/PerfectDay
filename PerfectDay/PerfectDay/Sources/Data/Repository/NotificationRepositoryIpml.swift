@@ -11,6 +11,9 @@ import Foundation
 import UserNotifications
 
 final class NotificationRepositoryIpml: NotificationRepository {
+
+  /// Notification 권한 설정
+  /// - Returns: 유저의 권한 상태 반환
   func checkNotificationUserAuth() -> AnyPublisher<UserState, Never> {
     Future<UserState, Never> { promise in
       let userNotificationCenter = UNUserNotificationCenter.current()
