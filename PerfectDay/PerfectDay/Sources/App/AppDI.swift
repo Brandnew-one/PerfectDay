@@ -9,7 +9,6 @@
 import Combine
 import Foundation
 
-
 /// 모든 Layer를 알고 있는 App Layer
 final class AppDI {
 
@@ -33,11 +32,13 @@ extension AppDI: AppDIInterface {
   }
 
   func makeMapDetailViewModel(
-    coordinate: Coordinate? = nil
+    coordinate: Coordinate? = nil,
+    dismissSbj: PassthroughSubject<Coordinate, Never>
   ) -> MapDetailViewModel {
     MapDetailViewModel(
       usecase: issueUsecase,
-      coordinate: coordinate
+      coordinate: coordinate,
+      dismissSbj: dismissSbj
     )
   }
 }

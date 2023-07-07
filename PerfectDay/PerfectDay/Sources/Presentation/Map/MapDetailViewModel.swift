@@ -19,12 +19,15 @@ final class MapDetailViewModel: ObservableObject {
 
   enum Action {
     case resetPosition
+    case dismiss
   }
 
   func action(_ action: Action) {
     switch action {
     case .resetPosition:
       input.resetPositionSbj.send()
+    case .dismiss:
+      dismissSbj.send(output.centerCoordinate)
     }
   }
 
@@ -39,14 +42,17 @@ final class MapDetailViewModel: ObservableObject {
   private var cancellables = Set<AnyCancellable>()
 
   private var coordinate: Coordinate?
+  private let dismissSbj: PassthroughSubject<Coordinate, Never>
   private let usecase: IssueUsecase
 
   init(
     usecase: IssueUsecase,
-    coordinate: Coordinate? = nil
+    coordinate: Coordinate? = nil,
+    dismissSbj: PassthroughSubject<Coordinate, Never>
   ) {
     self.usecase = usecase
     self.coordinate = coordinate
+    self.dismissSbj = dismissSbj
 
     if let coordinate = coordinate {
       input.coordinateSbj.value = MKCoordinateRegion(

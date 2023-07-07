@@ -13,6 +13,9 @@ struct MapDetailView: View {
   @StateObject
   var viewModel: MapDetailViewModel
 
+  @Environment(\.dismiss)
+  var dismiss
+
   var body: some View {
     NavigationView {
       ZStack(alignment: .bottom) {
@@ -53,6 +56,10 @@ struct MapDetailView: View {
           Text("save")
             .font(.pdBody3)
             .foregroundColor(.pdMainText)
+            .wrapToButton {
+              viewModel.action(.dismiss)
+              dismiss()
+            }
         }
       }
     }
