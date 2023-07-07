@@ -19,6 +19,9 @@ enum LS: String {
   case Issue0070
   case Issue0080
 
+  case map0000
+  case map0010
+  case map0020
 
   var localized: String {
     NSLocalizedString(self.rawValue, comment: "")

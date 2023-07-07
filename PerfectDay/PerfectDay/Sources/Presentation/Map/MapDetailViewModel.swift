@@ -35,6 +35,7 @@ final class MapDetailViewModel: ObservableObject {
     var centerCoordinate: Coordinate = Coordinate(latitude: 1, longtitude: 1)
     var centerAddress: String = ""
     var isChanging: Bool = false
+    var authAlertisShow: Bool = false
   }
 
   var input = Input()
@@ -118,8 +119,8 @@ final class MapDetailViewModel: ObservableObject {
             .eraseToAnyPublisher()
         }
         return self.usecase.locationPublisher
-          .catch { _ in
-            // TODO: - Error Handling
+          .catch { [weak self] _ in
+            self?.output.authAlertisShow = true
             return Empty(outputType: Coordinate.self, failureType: Never.self)
               .eraseToAnyPublisher()
           }

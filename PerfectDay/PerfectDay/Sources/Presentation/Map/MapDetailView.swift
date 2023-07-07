@@ -49,11 +49,23 @@ struct MapDetailView: View {
             .wrapToButton { viewModel.action(.resetPosition) }
         }
       }
-      .navigationTitle("위치 선택")
+      .alert(LS.map0020.localized, isPresented: $viewModel.output.authAlertisShow) {
+        Button(LS.Issue0070.localized, role: .cancel) { }
+        Button(LS.Issue0080.localized, role: .destructive) {
+          guard
+            let url = URL(string: UIApplication.openSettingsURLString)
+          else { return }
+
+          if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+          }
+        }
+      }
+      .navigationTitle(LS.map0000.localized)
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .navigationBarTrailing) {
-          Text("save")
+          Text(LS.map0010.localized)
             .font(.pdBody3)
             .foregroundColor(.pdMainText)
             .wrapToButton {
