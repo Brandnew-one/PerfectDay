@@ -14,5 +14,9 @@ protocol AppDIInterface {
     issue: Issue?,
     viewMode: IssueViewModel.ViewMode
   ) -> IssueViewModel
+
+  func makeMapDetailViewModel(
+    coordinate: Coordinate?
+  ) -> MapDetailViewModel
 }
 

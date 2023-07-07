@@ -15,7 +15,8 @@ final class AppDI {
 
   // FIXME: - Usecase들도 나중에는 주입 받을 수 있도록 수정하기
   private lazy var issueUsecase: IssueUsecase = IssueUsecase(
-    notificationRepo: NotificationRepositoryIpml()
+    notificationRepo: NotificationRepositoryIpml(),
+    locationRepo: LocationRepositoryIpml()
   )
 }
 
@@ -28,6 +29,15 @@ extension AppDI: AppDIInterface {
       usecase: issueUsecase,
       issue: issue,
       viewMode: viewMode
+    )
+  }
+
+  func makeMapDetailViewModel(
+    coordinate: Coordinate? = nil
+  ) -> MapDetailViewModel {
+    MapDetailViewModel(
+      usecase: issueUsecase,
+      coordinate: coordinate
     )
   }
 }
